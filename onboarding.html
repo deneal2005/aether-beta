@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#050505">
+  <title>Onboarding — Fastlane</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="demo.css">
+  <link rel="stylesheet" href="workspace.css">
+</head>
+<body class="onboarding-body">
+  <header class="onboarding-header">
+    <a class="onboarding-mark" href="/" aria-label="Fastlane home"><span></span><span></span><span></span></a>
+    <ol class="setup-progress" aria-label="Setup progress">
+      <li class="current">YOU</li><li>YOUR BRAND</li><li>THE PLAN</li><li>FIRST CAMPAIGN</li>
+    </ol>
+    <div class="account-tools"><a href="/login.html">Log out</a><span>Signed in as <b>demo@fastlane.local</b></span><a href="/login.html">Not you?</a></div>
+  </header>
+
+  <main class="onboarding-main" id="onboarding-wizard">
+    <div class="site-read-card" id="site-read-card">
+      <span class="site-check" aria-hidden="true">✓</span>
+      <span class="site-domain"><b id="site-domain">rent-mate-beryl.vercel.app</b><small>11 pages · 2 products</small></span>
+      <button type="button" id="site-details" aria-haspopup="dialog">Details</button>
+      <button type="button" id="change-site">✎ &nbsp;Change</button>
+    </div>
+
+    <div class="site-details-shade" id="site-details-shade" hidden>
+      <section class="site-details-dialog" role="dialog" aria-modal="true" aria-labelledby="details-title">
+        <div class="site-details-inner">
+          <div class="details-title-row"><span aria-hidden="true">✓</span><b id="details-title">Read rent-mate-beryl.vercel.app: 11 pages, 2 products</b></div>
+          <div class="details-row"><small>Pages</small><p>Home, How it works, Browse, Safety and 7 more</p></div>
+          <div class="details-row"><small>Logo and colours</small><div class="brand-swatches"><span class="mini-site-logo">rent<br>mate</span><i aria-label="Brand colour #f0a019"></i><i aria-label="Brand colour #15233b"></i></div></div>
+          <div class="details-row"><small>Competitors</small><p>QuickPartner, MeetReal, LetMeBuddy, HireApartner, RentalFriend, Hire-a-Friend, Rent Him, KoPartner</p></div>
+          <div class="details-row"><small>Products · 2</small><div class="product-chips"><span>Rent Mate</span><span>Verification membership</span></div></div>
+        </div>
+        <button class="details-close" id="close-site-details" type="button">Close</button>
+      </section>
+    </div>
+
+    <section class="change-site-panel" id="change-site-panel" hidden>
+      <h2>Change website</h2>
+      <form id="change-site-form">
+        <label class="visually-hidden" for="change-site-input">Website</label>
+        <span>https://</span><input id="change-site-input" value="rent-mate-beryl.vercel.app/" autocomplete="off">
+        <p>I'll read the new site from the start. Your answers so far stay.</p>
+        <div><button type="button" id="cancel-change-site">Cancel</button><button type="submit" class="read-site-submit">Read this site</button></div>
+      </form>
+    </section>
+
+    <section class="wizard-step" id="first-name-step" aria-labelledby="name-title">
+      <div class="senna-robot" aria-hidden="true"><span class="robot-antenna"></span><span class="robot-face"><i></i><i></i><b></b></span><span class="robot-cheek left"></span><span class="robot-cheek right"></span></div>
+      <h1 id="name-title">What's your first name?</h1>
+      <p>Got it, I'm reading it now.</p>
+      <form class="website-form first-name-form" id="first-name-form">
+        <label class="visually-hidden" for="first-name">First name</label>
+        <input id="first-name" name="first-name" autocomplete="off" placeholder="First name" required>
+        <button type="submit" id="continue-name" disabled>Continue <kbd>↵</kbd></button>
+      </form>
+    </section>
+
+    <section class="wizard-step" id="role-step" aria-labelledby="role-title" hidden>
+      <div class="senna-robot" aria-hidden="true"><span class="robot-antenna"></span><span class="robot-face"><i></i><i></i><b></b></span><span class="robot-cheek left"></span><span class="robot-cheek right"></span></div>
+      <h1 id="role-title">What's your role?</h1>
+      <p>I've read your site and your competitors. Here's the plan. We agree on the groups of people you sell to, then each one gets its own campaign.</p>
+      <div class="step-count">1 OF 6</div>
+      <fieldset class="choice-grid role-grid" aria-label="Pick one">
+        <legend class="visually-hidden">Pick one</legend>
+        <label class="choice-card"><input type="checkbox" name="role" value="Founder"><span>Founder</span><kbd>1</kbd></label>
+        <label class="choice-card"><input type="checkbox" name="role" value="Social Media Manager"><span>Social Media Manager</span><kbd>2</kbd></label>
+        <label class="choice-card"><input type="checkbox" name="role" value="Marketing Manager"><span>Marketing Manager</span><kbd>3</kbd></label>
+        <label class="choice-card"><input type="checkbox" name="role" value="Agency Owner"><span>Agency Owner</span><kbd>4</kbd></label>
+        <label class="choice-card"><input type="checkbox" name="role" value="Freelancer"><span>Freelancer</span><kbd>5</kbd></label>
+        <label class="choice-card"><input type="checkbox" name="role" value="Product Manager"><span>Product Manager</span><kbd>6</kbd></label>
+        <label class="choice-card"><input type="checkbox" name="role" value="Content Creator"><span>Content Creator</span><kbd>7</kbd></label>
+        <label class="choice-card"><input type="checkbox" name="role" value="Growth Manager"><span>Growth Manager</span><kbd>8</kbd></label>
+        <label class="choice-card"><input type="checkbox" name="role" value="Other"><span>Other</span><kbd>9</kbd></label>
+      </fieldset>
+      <p class="choice-help">You can also type a number to pick</p>
+    </section>
+
+    <section class="wizard-step" id="audience-step" aria-labelledby="audience-title" hidden>
+      <div class="senna-robot" aria-hidden="true"><span class="robot-antenna"></span><span class="robot-face"><i></i><i></i><b></b></span><span class="robot-cheek left"></span><span class="robot-cheek right"></span></div>
+      <h1 id="audience-title">Who do you sell to?</h1>
+      <div class="step-count">2 OF 6</div>
+      <fieldset class="choice-grid audience-grid" aria-label="Pick one">
+        <legend class="visually-hidden">Pick one</legend>
+        <label class="choice-card audience-card"><input type="checkbox" name="audience" value="Consumers"><span class="audience-icon">C</span><b>Consumers</b><small>People buying for themselves.</small><kbd>1</kbd></label>
+        <label class="choice-card audience-card"><input type="checkbox" name="audience" value="Businesses"><span class="audience-icon">B</span><b>Businesses</b><small>Teams buying for work.</small><kbd>2</kbd></label>
+        <label class="choice-card audience-card"><input type="checkbox" name="audience" value="Both"><span class="audience-icon">C+B</span><b>Both</b><small>Home and work.</small><kbd>3</kbd></label>
+      </fieldset>
+      <p class="choice-help">You can also type a number to pick</p>
+      <button class="back-step" id="back-to-role" type="button">Back</button>
+    </section>
+
+    <section class="wizard-step" id="goals-step" aria-labelledby="goals-title" hidden>
+      <div class="senna-robot" aria-hidden="true"><span class="robot-antenna"></span><span class="robot-face"><i></i><i></i><b></b></span><span class="robot-cheek left"></span><span class="robot-cheek right"></span></div>
+      <h1 id="goals-title">What are your goals?</h1>
+      <div class="step-count">3 OF 6</div>
+      <p class="step-instruction">Pick up to 3. Your first pick is your main goal.</p>
+      <fieldset class="choice-grid goals-grid" aria-label="Pick up to 3">
+        <legend class="visually-hidden">Pick up to 3</legend>
+        <label class="choice-card"><input type="checkbox" name="goal" value="Get sales"><kbd>1</kbd><span>Get sales</span></label>
+        <label class="choice-card"><input type="checkbox" name="goal" value="Get leads"><kbd>2</kbd><span>Get leads</span></label>
+        <label class="choice-card"><input type="checkbox" name="goal" value="More bookings"><kbd>3</kbd><span>More bookings</span></label>
+        <label class="choice-card"><input type="checkbox" name="goal" value="Grow following"><kbd>4</kbd><span>Grow following</span></label>
+        <label class="choice-card"><input type="checkbox" name="goal" value="Launch something new"><kbd>5</kbd><span>Launch something new</span></label>
+        <label class="choice-card"><input type="checkbox" name="goal" value="Build brand awareness"><kbd>6</kbd><span>Build brand awareness</span></label>
+        <label class="choice-card"><input type="checkbox" name="goal" value="More creative diversity"><kbd>7</kbd><span>More creative diversity</span></label>
+        <label class="choice-card"><input type="checkbox" name="goal" value="More creative volume"><kbd>8</kbd><span>More creative volume</span></label>
+        <label class="choice-card"><input type="checkbox" name="goal" value="Save time on marketing"><kbd>9</kbd><span>Save time on marketing</span></label>
+        <label class="choice-card"><input type="checkbox" name="goal" value="Improve CPM"><kbd>0</kbd><span>Improve CPM</span></label>
+      </fieldset>
+      <button class="continue-step" id="continue-goals" type="button" disabled>Continue <kbd>↵</kbd></button>
+      <p class="choice-help" id="goals-help">You can also type a number to pick</p>
+      <button class="back-step" id="back-to-audience" type="button">Back</button>
+    </section>
+
+    <section class="wizard-step" id="source-step" aria-labelledby="source-title" hidden>
+      <div class="senna-robot" aria-hidden="true"><span class="robot-antenna"></span><span class="robot-face"><i></i><i></i><b></b></span><span class="robot-cheek left"></span><span class="robot-cheek right"></span></div>
+      <h1 id="source-title">How did you hear about us?</h1>
+      <div class="step-count">4 OF 6</div>
+      <fieldset class="choice-grid source-grid" aria-label="How did you hear about us?">
+        <legend class="visually-hidden">How did you hear about us?</legend>
+        <label class="choice-card"><input type="checkbox" name="source" value="X (Twitter)"><span>X (Twitter)</span><kbd>1</kbd></label>
+        <label class="choice-card"><input type="checkbox" name="source" value="LinkedIn"><span>LinkedIn</span><kbd>2</kbd></label>
+        <label class="choice-card"><input type="checkbox" name="source" value="YouTube"><span>YouTube</span><kbd>3</kbd></label>
+        <label class="choice-card"><input type="checkbox" name="source" value="TikTok"><span>TikTok</span><kbd>4</kbd></label>
+        <label class="choice-card"><input type="checkbox" name="source" value="Instagram"><span>Instagram</span><kbd>5</kbd></label>
+        <label class="choice-card"><input type="checkbox" name="source" value="Facebook"><span>Facebook</span><kbd>6</kbd></label>
+        <label class="choice-card"><input type="checkbox" name="source" value="Podcast"><span>Podcast</span><kbd>7</kbd></label>
+        <label class="choice-card"><input type="checkbox" name="source" value="Newsletter"><span>Newsletter</span><kbd>8</kbd></label>
+        <label class="choice-card"><input type="checkbox" name="source" value="Google"><span>Google</span><kbd>9</kbd></label>
+        <label class="choice-card"><input type="checkbox" name="source" value="Reddit"><span>Reddit</span><kbd>0</kbd></label>
+        <label class="choice-card"><input type="checkbox" name="source" value="ChatGPT"><span>ChatGPT</span></label>
+        <label class="choice-card"><input type="checkbox" name="source" value="Claude"><span>Claude</span></label>
+        <label class="choice-card"><input type="checkbox" name="source" value="Gemini"><span>Gemini</span></label>
+        <label class="choice-card"><input type="checkbox" name="source" value="Friend/Referral"><span>Friend/Referral</span></label>
+        <label class="choice-card"><input type="checkbox" name="source" value="Other"><span>Other</span></label>
+      </fieldset>
+      <button class="continue-step" id="continue-source" type="button" disabled>Continue <kbd>↵</kbd></button>
+      <p class="choice-help" id="source-help">You can also type a number to pick</p>
+      <button class="back-step" id="back-to-goals" type="button">Back</button>
+    </section>
+
+    <section class="wizard-step" id="ads-step" aria-labelledby="ads-title" hidden>
+      <div class="senna-robot" aria-hidden="true"><span class="robot-antenna"></span><span class="robot-face"><i></i><i></i><b></b></span><span class="robot-cheek left"></span><span class="robot-cheek right"></span></div>
+      <h1 id="ads-title">Do you run ads today?</h1>
+      <p class="step-instruction">Paid ads on Meta, TikTok or Google.</p>
+      <div class="step-count">5 OF 6</div>
+      <fieldset class="choice-grid ads-grid" aria-label="Pick one">
+        <legend class="visually-hidden">Pick one</legend>
+        <label class="choice-card ad-status-card"><input type="checkbox" name="ads" value="Yes"><b>Yes</b><small>I'll find your ads and learn from what works.</small><kbd>1</kbd></label>
+        <label class="choice-card ad-status-card"><input type="checkbox" name="ads" value="No"><b>No</b><small>We'll start from your brand and your competitors.</small><kbd>2</kbd></label>
+      </fieldset>
+      <p class="choice-help">You can also type a number to pick</p>
+      <button class="back-step" id="back-to-source" type="button">Back</button>
+    </section>
+
+    <section class="wizard-step brand-review-step" id="brand-review-step" aria-labelledby="brand-review-title" hidden>
+      <div class="senna-robot" aria-hidden="true"><span class="robot-antenna"></span><span class="robot-face"><i></i><i></i><b></b></span><span class="robot-cheek left"></span><span class="robot-cheek right"></span></div>
+      <h1 id="brand-review-title">Here's Rent Mate, as we read it</h1>
+      <p>Change anything with Edit. It saves in place.</p>
+
+      <div class="brand-review-grid">
+        <article class="review-card brand-review-card">
+          <header><span>BRAND</span><button type="button" data-edit="brand">Edit</button></header>
+          <div class="brand-summary"><span class="review-logo">RM</span><div><h2 id="review-brand-name">Rent Mate</h2><a href="https://rent-mate-beryl.vercel.app/">rent-mate-beryl.vercel.app</a></div></div>
+          <div class="brand-colors"><span><i style="--swatch:#f0a019"></i><small>#F0A019</small></span><span><i style="--swatch:#15233b"></i><small>#15233B</small></span></div>
+          <div class="review-location"><span>Based in</span><span>India⌄</span></div>
+          <div class="review-location"><span>You're in</span><span>India⌄</span></div>
+          <p class="timezone-note">Post times: Calcutta time, from this browser. It stays put when you travel.</p>
+          <form class="inline-editor" data-editor="brand" hidden>
+            <label>Brand name<input name="brand-name" value="Rent Mate"></label>
+            <label>Based in<select><option>India</option><option>United States</option><option>United Kingdom</option><option>Canada</option><option>Australia</option></select></label>
+            <label>You're in<select><option>India</option><option>United States</option><option>United Kingdom</option><option>Canada</option><option>Australia</option></select></label>
+            <div class="editor-actions"><button type="submit">Save</button><button type="button" data-cancel-editor>Cancel</button></div>
+          </form>
+        </article>
+
+        <article class="review-card buyers-review-card">
+          <header><span>WHO BUYS</span><button type="button" data-edit="buyers">Edit</button></header>
+          <p class="buyer-summary">Sold to shoppers and businesses</p>
+          <div class="audience-chart" role="img" aria-label="Audience segments: 30, 20, 18, 17 and 15 percent"><span>30<small>%</small></span></div>
+          <ul class="audience-legend">
+            <li><i style="--segment:#d18b0b"></i><span>Solo city residents seeking company</span><b>30%</b></li>
+            <li><i style="--segment:#d3c628"></i><span>People attending events alone</span><b>20%</b></li>
+            <li><i style="--segment:#b84b08"></i><span>Visitors exploring unfamiliar cities</span><b>18%</b></li>
+            <li><i style="--segment:#82c85b"></i><span>People building social confidence</span><b>17%</b></li>
+            <li><i style="--segment:#a12b4e"></i><span>Workers seeking activity partners</span><b>15%</b></li>
+          </ul>
+          <form class="inline-editor" data-editor="buyers" hidden>
+            <label>Who buys<textarea name="buyers">Solo city residents seeking company, People attending events alone, Visitors exploring unfamiliar cities, People building social confidence, Workers seeking activity partners</textarea></label>
+            <fieldset><legend>Who you sell to</legend><label><input type="radio" name="buyer-type" value="Consumers">Consumers</label><label><input type="radio" name="buyer-type" value="Both" checked>Both</label><label><input type="radio" name="buyer-type" value="Businesses">Businesses</label></fieldset>
+            <p>Posts speak to people buying for home and for work.</p>
+            <div class="editor-actions"><button type="submit">Save</button><button type="button" data-cancel-editor>Cancel</button></div>
+          </form>
+        </article>
+
+        <article class="review-card positioning-review-card">
+          <header><span>POSITIONING AND EDGE</span><button type="button" data-edit="positioning">Edit</button></header>
+          <div class="positioning-highlight"><small>POSITIONING</small><p id="review-positioning">Legitimate, straightforward and protected companionship</p></div>
+          <dl class="positioning-details"><div><dt>Edge</dt><dd>Verified public companionship with safety controls</dd></div><div><dt>Problem</dt><dd>Safer company for social, practical and professional plans</dd></div><div><dt>They get</dt><dd>Verified users, public meets and active safety support</dd></div></dl>
+          <form class="inline-editor" data-editor="positioning" hidden>
+            <label>Positioning<textarea name="positioning">Rent Mate makes paid companionship feel legitimate, straightforward and protected rather than awkward, ambiguous or risky.</textarea></label>
+            <label>Why customers choose you<textarea name="edge">Rent Mate is built as an accountable marketplace for public, real-world companionship, not an open-ended social, dating or messaging app. Trust is designed into the full journey: government ID and live-selfie verification, one ID and one account, companion-controlled booking approval, secure in-app payments, communication unlocked only after confirmation, public-meeting requirements, live location during active sessions, check-ins, SOS tools, privacy protections and reviews limited to verified bookings.</textarea></label>
+            <div class="editor-actions"><button type="submit">Save</button><button type="button" data-cancel-editor>Cancel</button></div>
+          </form>
+        </article>
+
+        <article class="review-card products-review-card">
+          <header><span>WHAT YOU SELL</span><button type="button" data-edit="products">Edit</button></header>
+          <p id="review-product-summary">Pay-per-meet companionship bookings</p>
+          <label class="price-point-label">Price point<input id="price-point" value="Silver ₹299/mo; Gold ₹699/mo; Platinum ₹1,499/mo"></label>
+          <small class="price-point-help">Optional. Enter prices Senna may use in content. Prices on physical products can also be used.</small>
+          <div class="products-header"><span><b id="product-count">2</b> items</span><button type="button" id="add-product-toggle">＋ Add an item</button></div>
+          <div class="product-cards" id="product-cards">
+            <article class="product-card" data-product="Rent Mate">
+              <div class="product-image-placeholder" aria-hidden="true">↗</div>
+              <div class="product-copy"><b>Rent Mate</b><strong>From ₹299 / month</strong><p>A marketplace for booking identity-verified companions for public real-world plans.</p><small>From rent-mate-beryl.vercel.app, 16 Nov</small><button type="button" data-price-product="Rent Mate">Edit price</button><button type="button" class="remove-product" data-remove-product="Rent Mate">Remove Rent Mate, not relevant</button></div>
+            </article>
+            <article class="product-card" data-product="Verification membership">
+              <div class="product-image-placeholder" aria-hidden="true">↗</div>
+              <div class="product-copy"><b>Verification membership</b><strong>No price listed</strong><p>A companion verification membership with profile visibility and trust perks.</p><button type="button" data-price-product="Verification membership">Set price</button><button type="button" class="remove-product" data-remove-product="Verification membership">Remove Verification membership, not relevant</button></div>
+            </article>
+          </div>
+          <form class="inline-editor add-product-form" id="add-product-form" hidden>
+            <label>Name<input name="product-name" placeholder="Product name" required></label>
+            <label>Photos<input name="photos" type="file" accept="image/*" multiple></label>
+            <div class="demo-video-input"><span>Demo video</span><button type="button" id="add-demo-video">＋ Add a video</button><input name="demo-video" type="url" placeholder="Paste a video URL" hidden></div>
+            <div class="editor-actions"><button type="submit" disabled>Add product</button><button type="button" id="cancel-add-product">Cancel</button></div>
+          </form>
+          <form class="inline-editor price-form" id="price-form" hidden>
+            <label>Amount<input name="amount" type="number" min="0" step="1" required></label>
+            <label>Currency<select name="currency"><option>INR</option><option>USD</option><option>GBP</option><option>EUR</option></select></label>
+            <label>Price basis<select name="basis"><option>None</option><option>Per month</option><option>Per year</option><option>Per week</option><option>Per user per month</option><option>Per person</option><option>Per session</option><option>Per hour</option><option>Per class</option><option>One-time</option></select></label>
+            <label class="check-label"><input type="checkbox" name="starting-price">Starting price (from)</label>
+            <small>Shown here for review. Not used in posts or ads.</small>
+            <div class="editor-actions"><button type="submit">Save price</button><button type="button" id="cancel-price">Cancel</button></div>
+          </form>
+        </article>
+      </div>
+      <div class="review-actions"><button class="continue-step" id="continue-brand-review">Continue <kbd>↵</kbd></button><button class="back-step" id="back-to-ads">Back</button></div>
+    </section>
+
+    <section class="wizard-step competitors-step" id="competitors-step" aria-labelledby="competitors-title" hidden>
+      <div class="senna-robot" aria-hidden="true"><span class="robot-antenna"></span><span class="robot-face"><i></i><i></i><b></b></span><span class="robot-cheek left"></span><span class="robot-cheek right"></span></div>
+      <h1 id="competitors-title">Are these your competitors?</h1>
+      <p>Drop any that are not, I only plan against the ones you keep.</p>
+      <div class="competitor-grid" id="competitor-grid"></div>
+      <div class="competitor-footer"><button type="button" id="add-competitor" disabled>＋ Add a competitor</button><p><span id="competitor-count">12</span> is the most. Drop or remove one to add another.</p><div><button class="continue-step" id="confirm-competitors">Confirm <span id="competitor-confirm-count">12</span> <kbd>↵</kbd></button><button type="button" id="skip-competitors">Skip for now</button></div></div>
+    </section>
+
+    <section class="wizard-step first-posts-step" id="first-posts-step" aria-labelledby="first-posts-title" hidden>
+      <div class="senna-robot" aria-hidden="true"><span class="robot-antenna"></span><span class="robot-face"><i></i><i></i><b></b></span><span class="robot-cheek left"></span><span class="robot-cheek right"></span></div>
+      <p class="eyebrow">FIRST POSTS</p>
+      <h1 id="first-posts-title">A few ideas for Rent Mate</h1>
+      <p>Keep up to three to start your campaign. The rest stay here to review later.</p>
+      <div class="first-posts-grid" id="first-posts-grid">
+        <article class="first-post-card" data-post="concert">
+          <img src="assets/v2-fmt-product-hero-poster.jpg" alt="Illustrative concert companion video preview">
+          <div><small>VIDEO · 15 SEC</small><h2>When you want to go to the concert but nobody's free.</h2><p>A companion can make the night feel easier to say yes to.</p><button type="button" data-post-action="keep">Keep</button><button type="button" data-post-action="skip">Skip</button></div>
+        </article>
+        <article class="first-post-card" data-post="plans">
+          <img src="assets/v2-ag1-yapper-var1-poster.jpg" alt="Illustrative social plans video preview">
+          <div><small>VIDEO · 15 SEC</small><h2>You wanted to go to the concert. The plan was never the problem.</h2><p>Show what a verified companion changes about making plans.</p><button type="button" data-post-action="keep">Keep</button><button type="button" data-post-action="skip">Skip</button></div>
+        </article>
+        <article class="first-post-card" data-post="confidence">
+          <img src="assets/v2-fmt-notes-app.webp" alt="Illustrative social confidence slideshow preview">
+          <div><small>SLIDESHOW · 4 CARDS</small><h2>4 low-pressure ways to rebuild your social confidence.</h2><p>Small public plans can make showing up feel more manageable.</p><button type="button" data-post-action="keep">Keep</button><button type="button" data-post-action="skip">Skip</button></div>
+        </article>
+        <article class="first-post-card" data-post="meme">
+          <img src="assets/v2-static-noo-meme.webp" alt="Illustrative social plans meme preview">
+          <div><small>MEME · IMAGE</small><h2>Me pretending I'm fine with another cancelled plan.</h2><p>A light, relatable take on plans that fall through.</p><button type="button" data-post-action="keep">Keep</button><button type="button" data-post-action="skip">Skip</button></div>
+        </article>
+        <article class="first-post-card" data-post="alone">
+          <img src="assets/v2-fmt-billboard.webp" alt="Illustrative going out alone post preview">
+          <div><small>VIDEO · 15 SEC</small><h2>The plans you keep skipping because you'd have to go alone.</h2><p>Invite people to make a plan with a verified companion.</p><button type="button" data-post-action="keep">Keep</button><button type="button" data-post-action="skip">Skip</button></div>
+        </article>
+      </div>
+      <div class="first-posts-footer"><span><b id="first-post-count">0</b> of 3 kept · each kept video uses 5 credits</span><button class="continue-step" id="finish-onboarding" type="button" disabled>Go to Fastlane <kbd>↵</kbd></button></div>
+    </section>
+
+    <p class="onboarding-note" id="onboarding-note" role="status" aria-live="polite"></p>
+  </main>
+  <script src="demo.js" defer></script>
+  <script src="onboarding-demo.js" defer></script>
+</body>
+</html>
