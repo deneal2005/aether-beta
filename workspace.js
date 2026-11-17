@@ -5,6 +5,12 @@
   const overlay = document.querySelector('#fl-overlay');
   const dialogContent = document.querySelector('#dialog-content');
   const toast = document.querySelector('#fl-toast');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let dialogOpener = null;
+  let dialogCloseTimer;
+  let renderedView = null;
+  let routeExitAnimation = null;
+  let renderSequence = 0;
   const state = {
     view: location.hash.slice(1) || 'home',
     studioTab: 'overview',
@@ -64,7 +70,6 @@
   };
   const viewLabels = { home: 'Home', campaigns: 'Campaigns', calendar: 'Calendar', 'campaign-detail': 'Starter campaign', 'campaign-planner':'Plan a campaign', studio: 'Studio', brand: 'Brand', radar: 'Competitor Radar', analytics: 'Analytics', warmed: 'Warmed accounts', settings: 'Settings', chat: 'New chat with Senna' };
   let toastTimer;
-  let dialogReturnFocus = null;
   let drawerReturnFocus = null;
 
   const focusableSelector = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -102,7 +107,9 @@
     toastTimer = setTimeout(() => toast.classList.remove('visible'), 2600);
   }
   function openDialog(markup) {
-    if (overlay.hidden) dialogReturnFocus = document.activeElement;
+    clearTimeout(dialogCloseTimer);
+    overlay.classList.remove('is-closing');
+    if (overlay.hidden) dialogOpener = document.activeElement;
     dialogContent.innerHTML = markup;
     overlay.hidden = false;
     const closeButton = overlay.querySelector('.dialog-close');
@@ -110,11 +117,51 @@
     else overlay.querySelector('.fl-dialog')?.focus();
   }
   function closeDialog() {
-    if (overlay.hidden) return;
-    overlay.hidden = true;
-    dialogContent.replaceChildren();
-    restoreFocus(dialogReturnFocus);
-    dialogReturnFocus = null;
+    if (overlay.hidden || overlay.classList.contains('is-closing')) return;
+    const dialog = overlay.querySelector('.fl-dialog');
+    const finish = () => {
+      if (!overlay.classList.contains('is-closing')) return;
+      clearTimeout(dialogCloseTimer);
+      overlay.hidden = true;
+      overlay.classList.remove('is-closing');
+      dialogContent.replaceChildren();
+      restoreFocus(dialogOpener);
+      dialogOpener = null;
+    };
+    if (reducedMotion.matches || !dialog) {
+      overlay.hidden = true;
+      dialogContent.replaceChildren();
+      restoreFocus(dialogOpener);
+      dialogOpener = null;
+      return;
+    }
+    overlay.classList.add('is-closing');
+    dialog.addEventListener('animationend', (event) => {
+      if (event.animationName === 'motion-dialog-out') finish();
+    }, { once: true });
+    dialogCloseTimer = setTimeout(finish, 240);
+  }
+  function closeDrawer(shouldRestoreFocus = true) {
+    const drawer = document.querySelector('.drawer-panel');
+    if (!drawer || drawer.classList.contains('is-closing')) return;
+    if (reducedMotion.matches) {
+      drawer.remove();
+      if (shouldRestoreFocus) restoreFocus(drawerReturnFocus);
+      drawerReturnFocus = null;
+      return;
+    }
+    const finish = () => {
+      drawer.remove();
+      if (!document.querySelector('.drawer-panel')) {
+        if (shouldRestoreFocus) restoreFocus(drawerReturnFocus);
+        drawerReturnFocus = null;
+      }
+    };
+    drawer.classList.add('is-closing');
+    drawer.addEventListener('animationend', (event) => {
+      if (event.animationName === 'motion-drawer-out') finish();
+    }, { once: true });
+    setTimeout(finish, 260);
   }
   function openDrawer(title, description, body) {
     const previousDrawer = document.querySelector('.drawer-panel');
@@ -327,6 +374,12 @@
     return `<div class="planner-page"><div class="planner-title-row"><div><h1>Plan a campaign</h1><p><a href="#campaigns">Strategy</a> <span>›</span> People earning through companionship</p></div></div><section class="panel planner-panel"><div class="planner-count">${stepTitles[step]} · ${step+1} OF 5</div>${content}<div class="planner-actions"><button class="button-quiet" data-action="planner-back" ${step===0?'disabled':''}>Back</button><span class="spacer"></span><button class="button-primary" data-action="planner-next">${nextLabel}</button></div></section><div class="planner-step-dots">${['Angles','Accounts','Format and pace','Review'].map((label,index)=>`<span class="${(step<=1&&index===0)||(step===2&&index===1)||(step===3&&index===2)||(step===4&&index===3)?'active':''}">${label}</span>`).join('')}</div></div>`;
   }
   function render() {
+    const sequence = ++renderSequence;
+    const tabTransition = document.activeElement?.matches('.tab-button, .analytics-toggle button, .settings-nav button') || false;
+    const routeChanged = renderedView !== null && renderedView !== state.view;
+    renderedView = state.view;
+    routeExitAnimation?.cancel();
+    routeExitAnimation = null;
     setBreadcrumb();
     document.title = `${viewLabels[state.view] || 'Home'} · Fastlane`;
     const view = {
@@ -343,7 +396,32 @@
       settings:settingsView,
       chat:chatView
     }[state.view] || homeView;
-    app.innerHTML = view();
+    const update = (nativeTransition = false) => {
+      if (sequence !== renderSequence) return;
+      app.innerHTML = view();
+      document.dispatchEvent(new CustomEvent('fastlane:workspace-render', {
+        detail: { view: state.view, transition: tabTransition, nativeTransition }
+      }));
+    };
+    if (routeChanged && !reducedMotion.matches && typeof document.startViewTransition === 'function') {
+      try {
+        document.startViewTransition(() => update(true));
+      } catch {
+        update();
+      }
+    } else if (routeChanged && !reducedMotion.matches && typeof app.animate === 'function') {
+      routeExitAnimation = app.animate([
+        { opacity: 1, transform: 'translateY(0)' },
+        { opacity: 0, transform: 'translateY(-5px)' }
+      ], { duration: 110, easing: 'ease-in' });
+      routeExitAnimation.onfinish = () => {
+        if (sequence !== renderSequence) return;
+        routeExitAnimation = null;
+        update();
+      };
+    } else {
+      update();
+    }
   }
   function showCredits() {
     openDrawer('Your credits','0 credits · 3 of 28 campaign posts made.',`<section class="drawer-section"><h3>CAMPAIGN</h3><div class="drawer-row"><span>Created posts</span><b>3</b></div><div class="drawer-row"><span>Drafts still to make</span><b>25 · 125 credits</b></div></section><section class="drawer-section"><h3>HOW IT WORKS</h3><p class="muted tiny">Nothing is made or charged until you choose Make. Launch asks for confirmation first. Drafts not made stay drafts.</p><p class="muted tiny">Review each post before it goes out. AI can make mistakes.</p></section><button class="button-primary" data-action="plans">See plans</button>`);
@@ -443,7 +521,7 @@
       case 'tour': showToast('Workspace tour replay is not available in this local preview.'); break;
       case 'profile-menu': openDialog(`<p class="eyebrow">ACCOUNT</p><h2 id="dialog-title">Deneal</h2><p>Rent Mate workspace · Owner</p><div class="dialog-list"><button data-action="settings"><span>Settings</span><span>→</span></button><button data-action="refer"><span>Refer and earn</span><span>→</span></button><button data-action="help"><span>Support</span><span>→</span></button><button data-action="sign-out"><span>Sign out</span><span>↗</span></button></div>`); break;
       case 'settings': go('settings'); closeDialog(); break;
-      case 'warmed': go('warmed'); document.querySelector('.drawer-panel')?.remove(); break;
+      case 'warmed': go('warmed'); closeDrawer(); break;
       case 'refer': openDialog(`<p class="eyebrow">REFER AND EARN</p><h2 id="dialog-title">Invite a friend</h2><p>Referral details are not configured in this preview.</p><div class="dialog-actions"><button class="button-outline" data-action="close-dialog">Close</button></div>`); break;
       case 'help': openDialog(`<p class="eyebrow">SUPPORT</p><h2 id="dialog-title">How can we help?</h2><p>Support options shown in Fastlane include help articles and contacting the team. This preview does not send a message.</p><div class="dialog-actions"><button class="button-outline" data-action="close-dialog">Close</button></div>`); break;
       case 'new-chat': case 'chat': go('chat'); break;
@@ -519,6 +597,7 @@
     if ((event.key==='Enter'||event.key===' ') && event.target.matches('.studio-card[role="button"]')) showFormat(event.target.dataset.format);
   });
   overlay.addEventListener('click',(event)=>{if(event.target===overlay)closeDialog();});
+  document.addEventListener('fastlane:close-drawer', closeDrawer);
   document.querySelector('#workspace-switch')?.addEventListener('click',()=>openDialog(`<p class="eyebrow">WORKSPACES</p><h2 id="dialog-title">Choose a workspace</h2><div class="dialog-list"><button data-action="close-dialog"><span><b>Rent Mate</b><small>Current workspace</small></span><span>✓</span></button><button data-action="plan-details"><span><b>＋ New workspace</b><small>1 of 3 available on this plan</small></span><span>→</span></button></div><div class="dialog-actions"><button class="button-outline" data-action="close-dialog">Close</button></div>`));
   window.addEventListener('hashchange',syncRoute);
   if (sessionStorage.getItem('fastlane-demo-session') === 'active') render();
