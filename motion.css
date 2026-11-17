@@ -1,0 +1,160 @@
+@media (prefers-reduced-motion: no-preference) {
+  .motion-ready .hero-copy {
+    animation: motion-rise-in 620ms cubic-bezier(.2, .75, .25, 1) both;
+  }
+
+  .motion-ready .hero-reel {
+    animation: motion-rise-in 760ms 90ms cubic-bezier(.2, .75, .25, 1) both;
+  }
+
+  .motion-ready .hero-reel .note-left,
+  .motion-ready .hero-reel .note-right {
+    animation: motion-note-in 460ms 420ms cubic-bezier(.2, .75, .25, 1) both;
+  }
+
+  .motion-ready .login-card,
+  .motion-ready .onboarding-main {
+    animation: motion-rise-in 420ms cubic-bezier(.2, .75, .25, 1) both;
+  }
+
+  .motion-route-enter > * {
+    animation: motion-route-in 320ms cubic-bezier(.2, .75, .25, 1) both;
+  }
+
+  #app-content {
+    view-transition-name: workspace-content;
+  }
+
+  ::view-transition-old(workspace-content) {
+    animation: motion-view-out 140ms ease-in both;
+  }
+
+  ::view-transition-new(workspace-content) {
+    animation: motion-route-in 260ms cubic-bezier(.2, .75, .25, 1) both;
+  }
+
+  .motion-route-enter > :nth-child(2) { animation-delay: 24ms; }
+  .motion-route-enter > :nth-child(3) { animation-delay: 48ms; }
+  .motion-route-enter > :nth-child(4) { animation-delay: 72ms; }
+
+  .motion-ready .chart-placeholder::before {
+    clip-path: inset(0 100% 0 0);
+    animation: motion-chart-draw 820ms 100ms cubic-bezier(.2, .75, .25, 1) both;
+  }
+
+  .motion-ready .metric-card,
+  .motion-ready .post-tile,
+  .motion-ready .studio-card,
+  .motion-ready .remix-teaser,
+  .motion-ready .campaign-card,
+  .motion-ready .format-chip,
+  .motion-ready .nav-item,
+  .motion-ready .tab-button,
+  .motion-ready .button-primary,
+  .motion-ready .button-soft,
+  .motion-ready .button-quiet,
+  .motion-ready .button-outline,
+  .motion-ready .text-link,
+  .motion-ready .help-button,
+  .motion-ready .top-profile {
+    transition: transform 180ms cubic-bezier(.2, .75, .25, 1),
+      border-color 180ms ease, background-color 180ms ease, color 180ms ease,
+      box-shadow 180ms ease;
+  }
+
+  .motion-ready .metric-card:hover,
+  .motion-ready .post-tile:hover,
+  .motion-ready .studio-card:hover,
+  .motion-ready .remix-teaser:hover,
+  .motion-ready .campaign-card:hover {
+    transform: translateY(-2px);
+  }
+
+  .motion-ready button:active:not(:disabled),
+  .motion-ready .format-chip:active {
+    transform: scale(.985);
+  }
+
+  .motion-ready .tab-button[aria-selected="true"] {
+    box-shadow: inset 0 -2px currentColor;
+  }
+
+  .motion-ready .drawer-panel {
+    touch-action: pan-y;
+  }
+
+  .motion-ready .fl-overlay:not([hidden]) {
+    animation: motion-scrim-in 180ms ease-out both;
+  }
+
+  .motion-ready .fl-overlay.is-closing {
+    animation: motion-scrim-out 170ms ease-in both;
+  }
+
+  .motion-ready .fl-overlay.is-closing .fl-dialog {
+    animation: motion-dialog-out 170ms ease-in both;
+  }
+
+  .motion-ready .drawer-panel.is-closing {
+    animation: motion-drawer-out 190ms ease-in both;
+    pointer-events: none;
+  }
+}
+
+@keyframes motion-rise-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes motion-note-in {
+  from { opacity: 0; transform: translateY(7px) scale(.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes motion-route-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes motion-view-out {
+  to { opacity: 0; transform: translateY(-5px); }
+}
+
+@keyframes motion-chart-draw {
+  to { clip-path: inset(0 0 0 0); }
+}
+
+@keyframes motion-scrim-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes motion-scrim-out {
+  to { opacity: 0; }
+}
+
+@keyframes motion-dialog-out {
+  to { opacity: 0; transform: translateY(6px) scale(.99); }
+}
+
+@keyframes motion-drawer-out {
+  to { opacity: 0; transform: translateX(18px); }
+}
+
+@media (max-width: 760px) {
+  .drawer-panel {
+    width: min(420px, calc(100% - 20px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+  }
+}
