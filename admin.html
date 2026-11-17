@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f7fb">
+  <meta name="description" content="Fastlane administration dashboard preview">
+  <title>Overview · Fastlane Admin</title>
+  <link rel="preload" href="assets/Geist_Variable-s.p.0mrjj4bg00-he.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <div class="app-shell" id="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Main navigation">
+      <a class="brand" href="#overview" aria-label="Fastlane Admin overview" data-page="overview">
+        <span class="brand-mark" aria-hidden="true">F</span>
+        <span class="brand-copy"><strong>fastlane</strong><small>ADMIN CONSOLE</small></span>
+      </a>
+      <div class="workspace-card">
+        <span class="workspace-logo" aria-hidden="true">F</span>
+        <span class="workspace-copy"><strong>Fastlane Platform</strong><small>Platform operations</small></span>
+        <span class="workspace-status" aria-label="Platform status active"></span>
+      </div>
+      <nav class="side-nav" aria-label="Administration">
+        <a class="nav-link" href="#overview" data-page="overview" title="Overview"><span class="nav-icon" aria-hidden="true"></span><span class="nav-label">Overview</span></a>
+        <a class="nav-link" href="#analytics" data-page="analytics" title="Analytics"><span class="nav-icon" aria-hidden="true"></span><span class="nav-label">Analytics</span><span class="nav-tag">NEW</span></a>
+        <div class="nav-group">
+          <button class="nav-group-toggle" type="button" data-group-toggle="manage" aria-expanded="true"><span class="nav-group-label">MANAGE</span><span class="chevron" aria-hidden="true"></span></button>
+          <div class="nav-submenu" data-group="manage">
+            <a class="nav-link" href="#users" data-page="users" title="Users"><span class="nav-icon" aria-hidden="true"></span><span class="nav-label">Users</span><span class="nav-count" data-count="users"></span></a>
+            <a class="nav-link" href="#customers" data-page="customers" title="Customers"><span class="nav-icon" aria-hidden="true"></span><span class="nav-label">Customers</span></a>
+            <a class="nav-link" href="#products" data-page="products" title="Products"><span class="nav-icon" aria-hidden="true"></span><span class="nav-label">Products</span></a>
+            <a class="nav-link" href="#orders" data-page="orders" title="Orders"><span class="nav-icon" aria-hidden="true"></span><span class="nav-label">Orders</span><span class="nav-count" data-count="orders"></span></a>
+            <a class="nav-link" href="#transactions" data-page="transactions" title="Transactions"><span class="nav-icon" aria-hidden="true"></span><span class="nav-label">Transactions</span></a>
+          </div>
+        </div>
+        <div class="nav-group">
+          <button class="nav-group-toggle" type="button" data-group-toggle="insights" aria-expanded="true"><span class="nav-group-label">INSIGHTS</span><span class="chevron" aria-hidden="true"></span></button>
+          <div class="nav-submenu" data-group="insights">
+            <a class="nav-link" href="#reports" data-page="reports" title="Reports"><span class="nav-icon" aria-hidden="true"></span><span class="nav-label">Reports</span></a>
+            <a class="nav-link" href="#notifications" data-page="notifications" title="Notifications"><span class="nav-icon" aria-hidden="true"></span><span class="nav-label">Notifications</span></a>
+          </div>
+        </div>
+        <a class="nav-link" href="#settings" data-page="settings" title="Settings"><span class="nav-icon" aria-hidden="true"></span><span class="nav-label">Settings</span></a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="support-card"><span class="support-avatar" aria-hidden="true">?</span><div class="support-copy"><strong>Need a hand?</strong><small>Visit the help center</small></div><button class="support-link" type="button" data-action="help" aria-label="Open help center">↗</button></div>
+        <button class="collapse-button" id="collapse-sidebar" type="button" data-action="collapse-sidebar" aria-label="Collapse sidebar" aria-pressed="false"><span class="collapse-icon" aria-hidden="true">‹</span><span class="nav-label">Collapse sidebar</span></button>
+        <div class="sidebar-footnote">FASTLANE ADMIN <span>·</span> PREVIEW</div>
+      </div>
+    </aside>
+    <button class="sidebar-scrim" id="sidebar-scrim" type="button" aria-label="Close navigation" hidden></button>
+    <div class="main-column">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="icon-button menu-toggle" id="sidebar-toggle" type="button" data-action="sidebar-toggle" aria-label="Toggle navigation" aria-expanded="false"><span class="hamburger" aria-hidden="true"></span></button>
+          <div class="breadcrumb"><span>Platform</span><span class="breadcrumb-separator">/</span><strong id="breadcrumb-current">Overview</strong></div>
+        </div>
+        <div class="topbar-center">
+          <label class="global-search"><span class="search-icon" aria-hidden="true"></span><span class="visually-hidden">Search the dashboard</span><input id="global-search" type="search" autocomplete="off" placeholder="Search anything..." aria-controls="search-results"><kbd>⌘ K</kbd></label>
+        </div>
+        <div class="topbar-actions">
+          <span class="environment-pill"><i aria-hidden="true"></i> Demo data</span>
+          <button class="icon-button notification-button" type="button" data-action="notifications-popover" aria-label="Notifications" aria-haspopup="true" aria-expanded="false"><span class="bell-icon" aria-hidden="true"></span><span class="notification-dot" id="notification-dot"></span></button>
+          <button class="icon-button theme-button" type="button" data-action="toggle-theme" aria-label="Switch to dark mode"><span class="theme-icon" aria-hidden="true">☾</span></button>
+          <button class="profile-trigger" type="button" data-action="profile-popover" aria-haspopup="true" aria-expanded="false"><span class="profile-avatar">D</span><span class="profile-copy"><strong>Deneal</strong><small>Owner</small></span><span class="profile-chevron" aria-hidden="true">⌄</span></button>
+        </div>
+      </header>
+      <main class="page-content" id="main-content" tabindex="-1" aria-live="polite"></main>
+      <footer class="app-footer"><span>© 2026 Fastlane</span><span class="local-save-note"><i aria-hidden="true"></i> Preview changes are saved in this browser only</span></footer>
+    </div>
+  </div>
+  <div class="floating-panel" id="floating-panel" hidden></div>
+  <dialog class="record-dialog" id="record-dialog" aria-labelledby="dialog-title"></dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <noscript><p class="noscript-note">This dashboard preview needs JavaScript to show sample data and interactions.</p></noscript>
+  <script src="admin.js" defer></script>
+</body>
+</html>
