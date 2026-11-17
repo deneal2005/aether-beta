@@ -70,6 +70,32 @@
   };
   const viewLabels = { home: 'Home', campaigns: 'Campaigns', calendar: 'Calendar', 'campaign-detail': 'Starter campaign', 'campaign-planner':'Plan a campaign', studio: 'Studio', brand: 'Brand', radar: 'Competitor Radar', analytics: 'Analytics', warmed: 'Warmed accounts', settings: 'Settings', chat: 'New chat with Senna' };
   let toastTimer;
+  let drawerReturnFocus = null;
+
+  const focusableSelector = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+  function focusableWithin(container) {
+    return [...container.querySelectorAll(focusableSelector)].filter((element) => !element.hidden && element.getClientRects().length > 0);
+  }
+  function trapTab(container, event) {
+    const focusable = focusableWithin(container);
+    if (!focusable.length) {
+      event.preventDefault();
+      container.focus();
+      return;
+    }
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && (document.activeElement === first || !container.contains(document.activeElement))) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && (document.activeElement === last || !container.contains(document.activeElement))) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
+  function restoreFocus(element) {
+    if (element instanceof HTMLElement && element.isConnected && !element.hasAttribute('disabled')) element.focus();
+  }
 
   function escapeHTML(value) {
     return String(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
@@ -83,10 +109,12 @@
   function openDialog(markup) {
     clearTimeout(dialogCloseTimer);
     overlay.classList.remove('is-closing');
-    dialogOpener = document.activeElement;
+    if (overlay.hidden) dialogOpener = document.activeElement;
     dialogContent.innerHTML = markup;
     overlay.hidden = false;
-    overlay.querySelector('.dialog-close').focus();
+    const closeButton = overlay.querySelector('.dialog-close');
+    if (closeButton) closeButton.focus();
+    else overlay.querySelector('.fl-dialog')?.focus();
   }
   function closeDialog() {
     if (overlay.hidden || overlay.classList.contains('is-closing')) return;
@@ -97,13 +125,13 @@
       overlay.hidden = true;
       overlay.classList.remove('is-closing');
       dialogContent.replaceChildren();
-      if (dialogOpener?.isConnected) dialogOpener.focus();
+      restoreFocus(dialogOpener);
       dialogOpener = null;
     };
     if (reducedMotion.matches || !dialog) {
       overlay.hidden = true;
       dialogContent.replaceChildren();
-      if (dialogOpener?.isConnected) dialogOpener.focus();
+      restoreFocus(dialogOpener);
       dialogOpener = null;
       return;
     }
@@ -113,14 +141,22 @@
     }, { once: true });
     dialogCloseTimer = setTimeout(finish, 240);
   }
-  function closeDrawer() {
+  function closeDrawer(shouldRestoreFocus = true) {
     const drawer = document.querySelector('.drawer-panel');
     if (!drawer || drawer.classList.contains('is-closing')) return;
     if (reducedMotion.matches) {
       drawer.remove();
+      if (shouldRestoreFocus) restoreFocus(drawerReturnFocus);
+      drawerReturnFocus = null;
       return;
     }
-    const finish = () => drawer.remove();
+    const finish = () => {
+      drawer.remove();
+      if (!document.querySelector('.drawer-panel')) {
+        if (shouldRestoreFocus) restoreFocus(drawerReturnFocus);
+        drawerReturnFocus = null;
+      }
+    };
     drawer.classList.add('is-closing');
     drawer.addEventListener('animationend', (event) => {
       if (event.animationName === 'motion-drawer-out') finish();
@@ -128,20 +164,30 @@
     setTimeout(finish, 260);
   }
   function openDrawer(title, description, body) {
-    document.querySelector('.drawer-panel')?.remove();
+    const previousDrawer = document.querySelector('.drawer-panel');
+    if (!previousDrawer) drawerReturnFocus = document.activeElement;
+    previousDrawer?.remove();
     const drawer = document.createElement('aside');
     drawer.className = 'drawer-panel';
     drawer.setAttribute('role', 'dialog');
     drawer.setAttribute('aria-modal', 'true');
     drawer.setAttribute('aria-label', title);
+    drawer.setAttribute('tabindex', '-1');
     drawer.innerHTML = `<button class="drawer-close" data-action="close-drawer" aria-label="Close">×</button><h2>${escapeHTML(title)}</h2><p>${escapeHTML(description)}</p>${body}`;
     document.body.append(drawer);
     drawer.querySelector('.drawer-close').focus();
   }
+  function closeDrawer(shouldRestoreFocus = true) {
+    const drawer = document.querySelector('.drawer-panel');
+    if (!drawer) return;
+    drawer.remove();
+    if (shouldRestoreFocus) restoreFocus(drawerReturnFocus);
+    drawerReturnFocus = null;
+  }
   function go(view) { location.hash = view; }
   function syncRoute() {
     state.view = location.hash.slice(1) || 'home';
-    closeDrawer();
+    closeDrawer(false);
     render();
   }
   function setBreadcrumb() {
@@ -536,7 +582,14 @@
     if(control.matches('[data-action="planner-pace"]')) state.plannerPace=control.value;
   });
   document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') { closeDialog(); closeDrawer(); }
+    const activeDialog = !overlay.hidden ? overlay.querySelector('.fl-dialog') : document.querySelector('.drawer-panel');
+    if (event.key === 'Escape' && activeDialog) {
+      event.preventDefault();
+      if (!overlay.hidden) closeDialog();
+      else closeDrawer();
+      return;
+    }
+    if (event.key === 'Tab' && activeDialog) trapTab(activeDialog, event);
     if (event.key === 'Enter' && !event.shiftKey && event.target.matches('[data-compose],#chat-prompt')) {
       event.preventDefault();
       event.target.closest('.composer-box,.chat-start')?.querySelector('[data-action="send-prompt"]:not(:disabled)')?.click();

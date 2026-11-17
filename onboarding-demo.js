@@ -248,59 +248,116 @@ if (wizard) {
     ['KoPartner', 'kopartner.in', 'KP', 'KoPartner offers verified, consent-first professional companionship in numerous Indian cities, overlapping with buyers seeking safe social company.']
   ];
   const competitorGrid = document.querySelector('#competitor-grid');
+  const addCompetitorButton = document.querySelector('#add-competitor');
+  const addCompetitorForm = document.querySelector('#add-competitor-form');
+  const competitorNameInput = document.querySelector('#competitor-name');
+  const competitorWebsiteInput = document.querySelector('#competitor-website');
+  const competitorFormError = document.querySelector('#competitor-form-error');
+  function createCompetitorCard(competitor, index) {
+    const [name, domain, initials, description] = competitor;
+    const card = document.createElement('article');
+    card.className = 'competitor-card';
+    const head = document.createElement('div');
+    head.className = 'competitor-head';
+    const logo = document.createElement('span');
+    logo.className = 'competitor-logo';
+    logo.textContent = initials;
+    const identity = document.createElement('div');
+    const title = document.createElement('b');
+    title.textContent = name;
+    const url = document.createElement('small');
+    url.textContent = domain;
+    identity.append(title, url);
+    const number = document.createElement('kbd');
+    number.textContent = index < 9 ? String(index + 1) : index === 9 ? '0' : '';
+    const keepLabel = document.createElement('label');
+    keepLabel.className = 'keep-competitor';
+    const keep = document.createElement('input');
+    keep.type = 'checkbox';
+    keep.checked = true;
+    keep.setAttribute('aria-label', `Keep ${name}`);
+    keep.addEventListener('change', updateCompetitorCount);
+    keepLabel.append(keep);
+    const remove = document.createElement('button');
+    remove.type = 'button';
+    remove.textContent = '×';
+    remove.setAttribute('aria-label', `Remove ${name}`);
+    remove.addEventListener('click', () => {
+      if (!window.confirm(`Remove ${name} from this local preview?`)) return;
+      card.remove();
+      const competitorIndex = competitorData.indexOf(competitor);
+      if (competitorIndex !== -1) competitorData.splice(competitorIndex, 1);
+      updateCompetitorCount();
+    });
+    head.append(logo, identity, number, keepLabel, remove);
+    const copy = document.createElement('p');
+    copy.textContent = description;
+    card.append(head, copy);
+    competitorGrid.append(card);
+  }
   function renderCompetitors() {
     competitorGrid.replaceChildren();
-    competitorData.forEach(([name, domain, initials, description], index) => {
-      const card = document.createElement('article');
-      card.className = 'competitor-card';
-      const head = document.createElement('div');
-      head.className = 'competitor-head';
-      const logo = document.createElement('span');
-      logo.className = 'competitor-logo';
-      logo.textContent = initials;
-      const identity = document.createElement('div');
-      const title = document.createElement('b');
-      title.textContent = name;
-      const url = document.createElement('small');
-      url.textContent = domain;
-      identity.append(title, url);
-      const number = document.createElement('kbd');
-      number.textContent = index < 9 ? String(index + 1) : index === 9 ? '0' : '';
-      const keepLabel = document.createElement('label');
-      keepLabel.className = 'keep-competitor';
-      const keep = document.createElement('input');
-      keep.type = 'checkbox';
-      keep.checked = true;
-      keep.setAttribute('aria-label', `Keep ${name}`);
-      keep.addEventListener('change', updateCompetitorCount);
-      keepLabel.append(keep);
-      const remove = document.createElement('button');
-      remove.type = 'button';
-      remove.textContent = '×';
-      remove.setAttribute('aria-label', `Remove ${name}`);
-      remove.addEventListener('click', () => {
-        if (window.confirm(`Remove ${name} from this local preview?`)) {
-          card.remove();
-          updateCompetitorCount();
-        }
-      });
-      head.append(logo, identity, number, keepLabel, remove);
-      const copy = document.createElement('p');
-      copy.textContent = description;
-      card.append(head, copy);
-      competitorGrid.append(card);
-    });
+    competitorData.forEach(createCompetitorCard);
     updateCompetitorCount();
   }
   function updateCompetitorCount() {
     const kept = competitorGrid.querySelectorAll('.keep-competitor input:checked').length;
     document.querySelector('#competitor-count').textContent = String(kept);
     document.querySelector('#competitor-confirm-count').textContent = String(kept);
-    document.querySelector('#add-competitor').disabled = kept >= 12;
+    addCompetitorButton.disabled = kept >= 12;
   }
   renderCompetitors();
-  document.querySelector('#add-competitor')?.addEventListener('click', () => {
-    note.textContent = 'Add-competitor entry was not reachable while the live list was at its 12-item limit.';
+  addCompetitorButton?.addEventListener('click', () => {
+    addCompetitorForm.hidden = false;
+    competitorFormError.textContent = '';
+    competitorNameInput.focus();
+  });
+  document.querySelector('#cancel-add-competitor')?.addEventListener('click', () => {
+    addCompetitorForm.reset();
+    addCompetitorForm.hidden = true;
+    competitorFormError.textContent = '';
+    addCompetitorButton.focus();
+  });
+  addCompetitorForm?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    if (!addCompetitorForm.reportValidity()) return;
+    const name = competitorNameInput.value.trim();
+    const website = competitorWebsiteInput.value.trim();
+    if (!name) {
+      competitorNameInput.setCustomValidity('Enter a company name.');
+      addCompetitorForm.reportValidity();
+      competitorNameInput.setCustomValidity('');
+      return;
+    }
+    let websiteUrl;
+    try {
+      websiteUrl = new URL(website);
+    } catch {
+      competitorFormError.textContent = 'Enter a valid website address, including http:// or https://.';
+      competitorWebsiteInput.focus();
+      return;
+    }
+    if (!['http:', 'https:'].includes(websiteUrl.protocol) || !websiteUrl.hostname.includes('.')) {
+      competitorFormError.textContent = 'Enter a website address that starts with http:// or https://.';
+      competitorWebsiteInput.focus();
+      return;
+    }
+    const domain = websiteUrl.hostname.replace(/^www\./i, '');
+    if (competitorData.some(([, currentDomain]) => currentDomain.toLowerCase() === domain.toLowerCase())) {
+      competitorFormError.textContent = 'That website is already on the list.';
+      competitorWebsiteInput.focus();
+      return;
+    }
+    const initials = name.split(/\s+/).map((word) => word[0]).join('').slice(0, 2).toUpperCase();
+    const competitor = [name, domain, initials, 'Added during this local setup preview.'];
+    competitorData.push(competitor);
+    createCompetitorCard(competitor, competitorData.length - 1);
+    addCompetitorForm.reset();
+    addCompetitorForm.hidden = true;
+    competitorFormError.textContent = '';
+    updateCompetitorCount();
+    addCompetitorButton.focus();
+    note.textContent = `${name} added to the competitor list.`;
   });
   document.querySelector('#confirm-competitors')?.addEventListener('click', () => {
     showStep('first-posts-step');

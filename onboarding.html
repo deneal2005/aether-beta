@@ -250,7 +250,20 @@
       <h1 id="competitors-title">Are these your competitors?</h1>
       <p>Drop any that are not, I only plan against the ones you keep.</p>
       <div class="competitor-grid" id="competitor-grid"></div>
-      <div class="competitor-footer"><button type="button" id="add-competitor" disabled>＋ Add a competitor</button><p><span id="competitor-count">12</span> is the most. Drop or remove one to add another.</p><div><button class="continue-step" id="confirm-competitors">Confirm <span id="competitor-confirm-count">12</span> <kbd>↵</kbd></button><button type="button" id="skip-competitors">Skip for now</button></div></div>
+      <div class="competitor-footer">
+        <button type="button" id="add-competitor" disabled>＋ Add a competitor</button>
+        <form class="competitor-add-form" id="add-competitor-form" hidden aria-labelledby="add-competitor-title">
+          <h2 id="add-competitor-title">Add a competitor</h2>
+          <label for="competitor-name">Company name</label>
+          <input id="competitor-name" name="name" maxlength="80" autocomplete="organization" required>
+          <label for="competitor-website">Website</label>
+          <input id="competitor-website" name="website" type="url" placeholder="https://example.com" autocomplete="url" required>
+          <p class="competitor-form-error" id="competitor-form-error" role="status" aria-live="polite"></p>
+          <div class="competitor-form-actions"><button type="button" id="cancel-add-competitor">Cancel</button><button type="submit">Add competitor</button></div>
+        </form>
+        <p><span id="competitor-count">12</span> is the most. Drop or remove one to add another.</p>
+        <div><button class="continue-step" id="confirm-competitors">Confirm <span id="competitor-confirm-count">12</span> <kbd>↵</kbd></button><button type="button" id="skip-competitors">Skip for now</button></div>
+      </div>
     </section>
 
     <section class="wizard-step first-posts-step" id="first-posts-step" aria-labelledby="first-posts-title" hidden>
